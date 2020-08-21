@@ -1057,7 +1057,7 @@ exports.default = {
       this.clearField();
     },
     isInvalidValue: function isInvalidValue() {
-      return this.$el.validity.badInput;
+      return this.$el.validity ? this.$el.validity.badInput : false;
     },
     setFieldValue: function setFieldValue() {
       this.MdField.value = this.model;
@@ -7122,7 +7122,7 @@ function throwProtectedError(token) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _MdPortal = __webpack_require__(21);
@@ -7132,22 +7132,26 @@ var _MdPortal2 = _interopRequireDefault(_MdPortal);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-  name: 'MdOverlay',
-  components: {
-    MdPortal: _MdPortal2.default
-  },
-  props: {
-    mdActive: Boolean,
-    mdAttachToParent: Boolean,
-    mdFixed: Boolean
-  },
-  computed: {
-    overlayClasses: function overlayClasses() {
-      return {
-        'md-fixed': this.mdFixed
-      };
-    }
-  }
+	name: "MdOverlay",
+	components: {
+		MdPortal: _MdPortal2.default
+	},
+	props: {
+		mdTarget: {
+			type: null,
+			default: null
+		},
+		mdActive: Boolean,
+		mdAttachToParent: Boolean,
+		mdFixed: Boolean
+	},
+	computed: {
+		overlayClasses: function overlayClasses() {
+			return {
+				"md-fixed": this.mdFixed
+			};
+		}
+	}
 }; //
 //
 //
@@ -7864,7 +7868,7 @@ exports.default = {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _MdComponent = __webpack_require__(1);
@@ -7903,79 +7907,101 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = new _MdComponent2.default({
-  name: 'MdDialog',
-  components: {
-    MdPortal: _MdPortal2.default,
-    MdOverlay: _MdOverlay2.default,
-    MdFocusTrap: _MdFocusTrap2.default
-  },
-  props: {
-    mdActive: Boolean,
-    mdBackdrop: {
-      type: Boolean,
-      default: true
-    },
-    mdBackdropClass: {
-      type: String,
-      default: 'md-dialog-overlay'
-    },
-    mdCloseOnEsc: {
-      type: Boolean,
-      default: true
-    },
-    mdClickOutsideToClose: {
-      type: Boolean,
-      default: true
-    },
-    mdFullscreen: {
-      type: Boolean,
-      default: true
-    },
-    mdAnimateFromSource: Boolean
-  },
-  computed: {
-    dialogClasses: function dialogClasses() {
-      return {
-        'md-active': this.mdActive
-      };
-    },
-    dialogContainerClasses: function dialogContainerClasses() {
-      return {
-        'md-dialog-fullscreen': this.mdFullscreen
-      };
-    }
-  },
-  watch: {
-    mdActive: function mdActive(isActive) {
-      var _this = this;
+	name: "MdDialog",
+	components: {
+		MdPortal: _MdPortal2.default,
+		MdOverlay: _MdOverlay2.default,
+		MdFocusTrap: _MdFocusTrap2.default
+	},
+	props: {
+		mdActive: Boolean,
+		mdTarget: {
+			type: null,
+			default: null
+		},
+		mdBackdrop: {
+			type: Boolean,
+			default: true
+		},
+		mdBackdropClass: {
+			type: String,
+			default: "md-dialog-overlay"
+		},
+		mdCloseOnEsc: {
+			type: Boolean,
+			default: true
+		},
+		mdClickOutsideToClose: {
+			type: Boolean,
+			default: true
+		},
+		mdFullscreen: {
+			type: Boolean,
+			default: true
+		},
+		mdAnimateFromSource: Boolean
+	},
+	computed: {
+		dialogClasses: function dialogClasses() {
+			return {
+				"md-active": this.mdActive
+			};
+		},
+		dialogContainerClasses: function dialogContainerClasses() {
+			return {
+				"md-dialog-fullscreen": this.mdFullscreen
+			};
+		}
+	},
+	watch: {
+		mdActive: function mdActive(isActive) {
+			var _this = this;
 
-      this.$nextTick().then(function () {
-        if (isActive) {
-          _this.$emit('md-opened');
-        } else {
-          _this.$emit('md-closed');
-        }
-      });
-    }
-  },
-  methods: {
-    closeDialog: function closeDialog() {
-      this.$emit('update:mdActive', false);
-    },
-    onClick: function onClick() {
-      if (this.mdClickOutsideToClose) {
-        this.closeDialog();
-      }
-      this.$emit('md-clicked-outside');
-    },
-    onEsc: function onEsc() {
-      if (this.mdCloseOnEsc) {
-        this.closeDialog();
-      }
-    }
-  }
+			if (this.mdTarget) {
+				if (isActive) {
+					this.mdTarget.style.overflow = "hidden";
+				} else {
+					this.mdTarget.style.overflow = "auto";
+				}
+			}
+			this.$nextTick().then(function () {
+				if (isActive) {
+					_this.$emit("md-opened");
+				} else {
+					_this.$emit("md-closed");
+				}
+			});
+		}
+	},
+	methods: {
+		closeDialog: function closeDialog() {
+			this.$emit("update:mdActive", false);
+		},
+		onClick: function onClick() {
+			if (this.mdClickOutsideToClose) {
+				this.closeDialog();
+			}
+			this.$emit("md-clicked-outside");
+		},
+		onEsc: function onEsc() {
+			if (this.mdCloseOnEsc) {
+				this.closeDialog();
+			}
+		}
+	}
 });
 
 /***/ }),
@@ -8121,7 +8147,7 @@ exports.default = new _MdComponent2.default({
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 //
 //
@@ -8131,7 +8157,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
-  name: 'MdDialogActions'
+	name: 'MdDialogActions'
 };
 
 /***/ }),
@@ -23065,7 +23091,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "md-portal",
-    { attrs: { "md-attach-to-parent": _vm.mdAttachToParent } },
+    {
+      attrs: {
+        "md-attach-to-parent": _vm.mdAttachToParent,
+        mdTarget: _vm.mdTarget
+      }
+    },
     [
       _c("transition", { attrs: { name: "md-overlay" } }, [
         _vm.mdActive
@@ -26561,12 +26592,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "md-portal",
+    { attrs: { mdTarget: _vm.mdTarget } },
     [
       _c("transition", { attrs: { name: "md-dialog" } }, [
         _vm.mdActive
           ? _c(
               "div",
-              { staticClass: "md-dialog" },
+              {
+                staticClass: "md-dialog",
+                class: _vm.mdTarget ? "with-target" : ""
+              },
               [
                 _c("md-focus-trap", [
                   _c(
@@ -26602,7 +26637,8 @@ var render = function() {
                             ? _c("md-overlay", {
                                 class: _vm.mdBackdropClass,
                                 attrs: {
-                                  "md-fixed": "",
+                                  mdTarget: _vm.mdTarget,
+                                  "md-fixed": _vm.mdTarget ? false : true,
                                   "md-active": _vm.mdActive
                                 },
                                 on: { click: _vm.onClick }
